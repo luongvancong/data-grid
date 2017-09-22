@@ -1,0 +1,19 @@
+{
+	"name": "blackbear/data-grid",
+	"description": "The data grid for own data source. Make data grid in minutes",
+	"keywords": ["data table", "data grid", "laravel data grid"],
+	"license": "MIT",
+	"version": "1.0.0",
+	"require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BlackBear\\DataGrid\\": "src/"
+        },
+        "files": [
+        	"src/helper.php"
+        ]
+    }
+}
