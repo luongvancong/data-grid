@@ -2,7 +2,7 @@
 
 #### Code:
 
-		$faker = \Faker\Factory::create();
+	$faker = \Faker\Factory::create();
         $dataSource = new Collection();
         for($i = 0; $i < 30; $i ++) {
             $dataSource->push([
