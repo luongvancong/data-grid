@@ -19,6 +19,7 @@ class Table {
 	}
 
 	public function addColumn($key, $label) {
+		if(!$key) $key = md5(uniqid().rand(111111,999999));
 		$this->headings[$key] = $label;
 		$this->lastKeyAdded = $key;
 		return $this;
