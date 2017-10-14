@@ -4,6 +4,14 @@
 	"keywords": ["data table", "data grid", "laravel data grid"],
 	"license": "MIT",
 	"version": "1.0.0",
+    "authors": [
+        {
+            "name": "Justin Luong",
+            "email": "cong.itsoft@gmail.com",
+            "homepage": "https://www.facebook.com/cong.itsoft",
+            "role": "Creator"
+        }
+    ],
 	"require-dev": {
         "fzaninotto/faker": "~1.4",
         "phpunit/phpunit": "~5.0"
