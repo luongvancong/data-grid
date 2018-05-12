@@ -22,7 +22,6 @@ class DataTable {
 	protected $editLabel = "Edit";
 	protected $deleteLabel = "Delete";
     protected $currentUrl; // Using this option with option showEditDelete
-    protected $primaryKey = 'id';
     protected $renderEditUrl;
     protected $renderDeleteUrl;
     protected $onCheckboxChanged;
@@ -44,7 +43,6 @@ class DataTable {
         $this->editLabel = $this->getConfig('editLabel', $this->editLabel);
         $this->deleteLabel = $this->getConfig('deleteLabel', $this->deleteLabel);
         $this->currentUrl = $this->getConfig('currentUrl', "");
-        $this->primaryKey = $this->getConfig('editUrl', $this->primaryKey);
         $this->renderEditUrl = $this->getConfig('renderEditUrl');
         $this->renderDeleteUrl = $this->getConfig('renderDeleteUrl');
         if($this->showEditDelete) {
