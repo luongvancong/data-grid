@@ -7,25 +7,21 @@ use Closure;
 class DataTable {
 
 	protected $headings = array();
-	protected $lastKeyAdded;
-	protected $callback = [];
-	protected $sortable = [];
-
-	protected $config = [];
-    protected $dataSource;
+	protected $config = []; // Required
+    protected $dataSource; // Required
 	protected $visibleColumns;
 	protected $columnHeaders;
-	protected $renderColumnContent;
-	protected $showCheckbox = true;
-	protected $showContextMenu = true;
-	protected $showEditDelete = true;
-	protected $editLabel = "Edit";
-	protected $deleteLabel = "Delete";
-    protected $currentUrl; // Using this option with option showEditDelete
-    protected $renderEditUrl;
-    protected $renderDeleteUrl;
-    protected $onCheckboxChanged;
-    protected $columnStyle;
+	protected $renderColumnContent; // Customize column content
+	protected $showCheckbox = true; // Display multi checkbox
+	protected $renderRowAttribute; // Customize row attribute
+    protected $showContextMenu = true; // Show context menu each row
+	protected $showEditDelete = true; // Show edit, delete button each row
+	protected $editLabel = "Edit"; // The edit column label
+	protected $deleteLabel = "Delete"; // The delete column label
+    protected $currentUrl; // Using this option with option $sortColumns. Required if showEditDelete=true
+    protected $renderEditUrl; // Customize edit url. Required if showEditDelete=true
+    protected $renderDeleteUrl; // Customize delete url. Required if showEditDelete=true
+    protected $renderColumnAttribute; // Customize column attributes
     protected $sortColumns;
 
 	public function __construct(array $config)
@@ -36,7 +32,6 @@ class DataTable {
         $this->renderColumnContent = $this->getConfig('renderColumnContent');
         $this->showCheckbox = $this->getConfig('showCheckbox');
         $this->showContextMenu = $this->getConfig('showContextMenu');
-        $this->onCheckboxChanged = $this->getConfig('onCheckboxChanged');
         $this->dataSource = $this->getConfig('dataSource', []);
         $this->sortColumns = $this->getConfig('sortColumns', []);
         $this->showEditDelete = $this->getConfig('showEditDelete', true);
@@ -45,6 +40,14 @@ class DataTable {
         $this->currentUrl = $this->getConfig('currentUrl', "");
         $this->renderEditUrl = $this->getConfig('renderEditUrl');
         $this->renderDeleteUrl = $this->getConfig('renderDeleteUrl');
+        $this->renderRowAttribute = $this->getConfig('renderRowAttribute');
+        $this->renderColumnAttribute = $this->getConfig('renderColumnAttribute');
+        if($this->showCheckbox) {
+            array_unshift($this->visibleColumns, '_checkbox');
+            $this->columnHeaders = array_merge($this->columnHeaders, [
+                '_checkbox' => '<i class="fa fa-square-o data-table-checkbox-all"></i>'
+            ]);
+        }
         if($this->showEditDelete) {
             $this->visibleColumns = array_merge($this->visibleColumns, ['_edit', '_delete']);
             $this->columnHeaders = array_merge($this->columnHeaders, [
@@ -68,7 +71,7 @@ class DataTable {
 		$this->headings[$key] = $label;
 		// Override heading if want to sort
 		foreach($this->sortColumns as $column) {
-		    $this->headings[$column] = get_sort_link($this->columnHeaders[$column], $key, $this->currentUrl, []);
+		    $this->headings[$column] = get_sort_link($this->columnHeaders[$column], $column, $this->currentUrl, []);
         }
 		return $this;
 	}
@@ -102,7 +105,10 @@ class DataTable {
 	{
 		$str = "";
 		foreach($this->dataSource as $index => $item) {
-			$str .= '<tr data-index="'.$index.'">'.$this->renderColumns($item).'</tr>';
+		    $extraAttr = $this->renderRowAttribute instanceof Closure
+                            ? $this->renderHtmlAttributes(call_user_func_array($this->renderRowAttribute, [$item]))
+                            : "";
+			$str .= '<tr data-index="'.$index.'" '.$extraAttr.'>'.$this->renderColumns($item).'</tr>';
 		}
 		return $str;
 	}
@@ -121,6 +127,14 @@ class DataTable {
 	    $content = "";
 	    $defaultContent = isset($item[$column]) ? $item[$column] : "";
 
+	    if($this->showCheckbox) {
+	        switch ($column) {
+                case '_checkbox':
+                    $defaultContent = '<i class="fa fa-square-o data-table-checkbox-item"></i>';
+                    break;
+            }
+        }
+
         if($this->showEditDelete) {
             switch ($column) {
                 case '_edit':
@@ -138,6 +152,23 @@ class DataTable {
             $content = strval(call_user_func_array($this->renderColumnContent, array($item, $column)));
 	    }
 
-        return sprintf('<td data-key="'.$column.'">%s</td>', $content ? $content : $defaultContent);
+	    $extraAttribute = $this->renderColumnAttribute instanceof Closure
+                            ? $this->renderHtmlAttributes(call_user_func_array($this->renderColumnAttribute, [$item, $column]))
+                            : "";
+
+        return sprintf('<td data-key="'.$column.'" '.$extraAttribute.'>%s</td>', $content ? $content : $defaultContent);
+    }
+
+    protected function renderHtmlAttributes($attributes) {
+	    if(is_array($attributes)) {
+            $pattern = '%s="%s"';
+            $attrArray = [];
+            foreach ($attributes as $key => $value) {
+                $attrArray[] = sprintf($pattern, $key, $value);
+            }
+            return implode(' ', $attrArray);
+        } elseif(is_string($attributes)) {
+	        return $attributes;
+        }
     }
 }

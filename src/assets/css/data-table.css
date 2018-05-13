@@ -1,0 +1,5 @@
+.data-table-checkbox-item,
+.data-table-checkbox-all {
+    cursor: pointer;
+    font-size: 15px;
+}
