@@ -2,7 +2,7 @@
 
 #### Installation
 
-    composer require blackbear/data-grid
+    composer require blackbear/data-grid v0.0.*
 
 #### Example with full options:
 
