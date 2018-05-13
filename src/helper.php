@@ -87,7 +87,7 @@ if( ! function_exists('get_sort_link') ) {
 	 * @param  array  $query
 	 * @return string
 	 */
-	function get_sort_link($key, $link, array $query) {
-		return sprintf('<a href="'.build_sort_link($key, $link).'">Id %s</a>', get_icon_sort($key, $query));
+	function get_sort_link($label, $key, $link, array $query) {
+		return sprintf('<a href="'.build_sort_link($key, $link).'">%s %s</a>', $label, get_icon_sort($key, $query));
 	}
 }

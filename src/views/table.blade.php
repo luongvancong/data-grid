@@ -7,6 +7,6 @@
 		</tr>
 	</thead>
 	<tbody>
-		{!! $table->renderRows() !!}
+		{!! $ref->renderRows() !!}
 	</tbody>
 </table>
