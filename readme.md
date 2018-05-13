@@ -1,8 +1,8 @@
-# Laravel table data grid
+# Make data table in minutes
 
 #### Installation
 
-    composer require blackbear/data-grid
+    composer require blackbear/data-grid v0.0.*
 
 #### Example with full options:
 
@@ -57,3 +57,33 @@
     ]);
 
     return view('tests/data-grid', ['tableContent' => $dataGrid->render()]);
+
+Template HTML
+
+    @extends('admin/layouts/master')
+    
+    @section('main-content')
+    	<style>
+    		{{ file_get_contents(base_path().'/vendor/blackbear/data-grid/src/assets/css/data-table.css') }}
+    	</style>
+    	<script>
+    		{!! file_get_contents(base_path().'/vendor/blackbear/data-grid/src/assets/js/data-table.js') !!}
+    	</script>
+    	<script>
+    		$(function() {
+    		   	DataTable.init({
+    				onChangeItem: function(row, e) {
+    				    
+    				},
+    				onCheckAll: function(e) {
+    
+    				}
+    			})
+    		});
+    	</script>
+    	<div class="panel">
+    		<div class="panel-body">
+    			{!! $tableContent !!}
+    		</div>
+    	</div>
+    @stop
