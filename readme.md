@@ -1,7 +1,10 @@
 # Laravel table data grid
 
-#### Code:
+#### Installation
 
+    composer require blackbear/data-grid
+
+#### Example with full options:
 
 	$faker = \Faker\Factory::create();
     $dataSource = new Collection();
